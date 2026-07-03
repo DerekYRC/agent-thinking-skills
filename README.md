@@ -12,7 +12,7 @@
   <img src="https://img.shields.io/badge/license-Apache%202.0-111111?style=flat-square" alt="Apache 2.0 license">
 </p>
 
-<h1 align="center"><a href="README.zh.md">中文</a></h1>
+<h1 align="center"><a href="README.zh.md"><u>中文</u></a></h1>
 
 ---
 

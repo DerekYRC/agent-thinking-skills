@@ -12,7 +12,7 @@
   <img src="https://img.shields.io/badge/协议-Apache%202.0-111111?style=flat-square" alt="Apache 2.0 协议">
 </p>
 
-<h1 align="center"><a href="README.md">English</a></h1>
+<h1 align="center"><a href="README.md"><u>English</u></a></h1>
 
 ---
 

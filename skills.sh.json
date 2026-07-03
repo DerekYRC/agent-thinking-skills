@@ -1,0 +1,11 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "Thinking Frameworks",
+      "description": "Skills that improve how AI agents think — generation and verification frameworks for better code quality.",
+      "skills": ["first-principles", "adversarial-review"]
+    }
+  ]
+}

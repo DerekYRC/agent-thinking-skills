@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "skills": {
+    "adversarial-review": {
+      "source": "DerekYRC/agent-thinking-skills",
+      "sourceType": "github",
+      "skillPath": "skills/adversarial-review/SKILL.md",
+      "computedHash": "2cb48957a64da5cd7cabbbbbe3e5355e2b916f414392e794b444fc8474fd4eff"
+    },
+    "first-principles": {
+      "source": "DerekYRC/agent-thinking-skills",
+      "sourceType": "github",
+      "skillPath": "skills/first-principles/SKILL.md",
+      "computedHash": "f4fe7407d6e87a4cc9e33bc4e3d9ba03889a2cb6a57a54968d82e5e3ee3a2272"
+    },
+    "skill-creator": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/skill-creator/SKILL.md",
+      "computedHash": "5ea13a6d9f0d4bb694405d79acd00cadec0d21bb138c4dd10fcf3c500cb835c2"
+    }
+  }
+}

@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <sub><a href="README.md"><img src="https://img.shields.io/badge/🌐-English-blue?style=for-the-badge" alt="English"></a></sub>
+  <sub><a href="README.md"><img src="https://img.shields.io/badge/English-8b5cf6?style=flat-square" alt="English"></a></sub>
 </p>
 
 ---

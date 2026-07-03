@@ -7,13 +7,12 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/PlanBForFreedom/agent-thinking-skills"><img src="https://img.shields.io/github/stars/PlanBForFreedom/agent-thinking-skills?style=flat-square&color=111111&label=stars" alt="Stars"></a>
-  <img src="https://img.shields.io/badge/支持-Claude%20Code%20%7C%20Codex%20%7C%20OpenCode-111111?style=flat-square" alt="支持 Claude Code、Codex、OpenCode">
-  <img src="https://img.shields.io/badge/协议-MIT-111111?style=flat-square" alt="MIT 协议">
+<a href="https://github.com/DerekYRC/agent-thinking-skills"><img src="https://img.shields.io/badge/协议-Apache%202.0-111111?style=flat-square" alt="Apache 2.0 协议"></a>
+<a href="https://github.com/DerekYRC/agent-thinking-skills"><img src="https://img.shields.io/badge/支持-Claude%20Code%20%7C%20Codex%20%7C%20OpenCode-111111?style=flat-square" alt="支持 Claude Code、Codex、OpenCode"></a>
 </p>
 
 <p align="center">
-  <h4><a href="README.md">🌐 English</a></h4>
+  <a href="README.md"><img src="https://img.shields.io/badge/🌐-English-blue?style=for-the-badge" alt="English"></a>
 </p>
 
 ---
@@ -37,7 +36,7 @@
 
 支持单次触发（在 prompt 末尾加"think from first principles"）和持续模式（"enable first principles"）。
 
-**实际案例：** AI 说"修复 OpenAI 的抓取"。加了第一性原理后，它发现真正的问题是一个 4 月份写的底层流量路由缺陷——那只国产模型只是不小心暴露了它。治标 vs 治本。
+**示例：** 你让 AI "给慢接口加个缓存"。AI 的类比直觉是直接上 Redis。加入第一性原理后，它停下来反问：*到底慢在哪？* 追到真正的瓶颈是 ORM 里的 N+1 查询——优化掉这行 SQL，缓存根本不需要。一行代码 vs 一套新基础设施。
 
 [完整 skill 文档 →](skills/first-principles/SKILL.md)
 
@@ -49,7 +48,7 @@
 
 启动多个 AI Agent 并行审查，每个 Agent 从不同角度攻击你的代码。6 个维度：**边界条件、安全漏洞、性能炸弹、数据一致性、错误处理、并发竞态**。三档：快速（2-3 Agent）、标准（6 Agent）、深度（12-18 Agent + 交叉验证）。
 
-**实际案例：** 发现后台 Worker 的 OOM 死循环、"未来时间戳"数据污染 BUG、部署探活的缓存穿透假阳性——全都在上线之前。
+**示例：** 你写好了一个用户注册表单。对抗式审查发现了：邮箱正则里有 ReDoS 漏洞（边界），用户名允许隐形 Unicode 字符可用于冒充他人（安全），注册接口没有限流可以批量注册僵尸号（性能）。一个用户都还没注册，三个隐患已被揪出。
 
 [完整 skill 文档 →](skills/adversarial-review/SKILL.md)
 
@@ -59,27 +58,17 @@
 
 ### 通过 skills.sh（推荐）
 
-```bash
-npx skills add PlanBForFreedom/agent-thinking-skills
-```
-
-两个 skill 一起安装。在你的 AI Agent 中启用：
+分别安装：
 
 ```bash
-# Claude Code / Codex
-/install PlanBForFreedom/agent-thinking-skills
+# 第一性原理
+npx skills add https://github.com/derekyrc/agent-thinking-skills --skill first-principles
 
-# OpenCode
-# 在 opencode.json 中添加：{ "plugin": ["./skills/first-principles", "./skills/adversarial-review"] }
+# 对抗式审查
+npx skills add https://github.com/derekyrc/agent-thinking-skills --skill adversarial-review
 ```
 
-### 手动安装
-
-克隆仓库并指向你的 Agent 的 skills 目录：
-
-```bash
-git clone https://github.com/PlanBForFreedom/agent-thinking-skills.git
-```
+两个 skill 通过 `--skill` 参数分别安装。
 
 ---
 
@@ -106,4 +95,4 @@ Vibe Coding 有两大薄弱环节：**思考深度**和**质量验证**。这两
 
 ## 协议
 
-MIT © [DerekYRC](https://github.com/DerekYRC)
+Apache 2.0 © [DerekYRC](https://github.com/DerekYRC)

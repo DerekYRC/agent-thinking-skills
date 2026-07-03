@@ -7,13 +7,12 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/PlanBForFreedom/agent-thinking-skills"><img src="https://img.shields.io/github/stars/PlanBForFreedom/agent-thinking-skills?style=flat-square&color=111111&label=stars" alt="Stars"></a>
-  <img src="https://img.shields.io/badge/works%20with-Claude%20Code%20%7C%20Codex%20%7C%20OpenCode-111111?style=flat-square" alt="Works with Claude Code, Codex, OpenCode">
-  <img src="https://img.shields.io/badge/license-MIT-111111?style=flat-square" alt="MIT license">
+<a href="https://github.com/DerekYRC/agent-thinking-skills"><img src="https://img.shields.io/badge/license-Apache%202.0-111111?style=flat-square" alt="Apache 2.0 license"></a>
+<a href="https://github.com/DerekYRC/agent-thinking-skills"><img src="https://img.shields.io/badge/works%20with-Claude%20Code%20%7C%20Codex%20%7C%20OpenCode-111111?style=flat-square" alt="Works with Claude Code, Codex, OpenCode"></a>
 </p>
 
 <p align="center">
-  <h4><a href="README.zh.md">🌐 中文</a></h4>
+  <a href="README.zh.md"><img src="https://img.shields.io/badge/🌐-中文-blue?style=for-the-badge" alt="中文"></a>
 </p>
 
 ---
@@ -37,7 +36,7 @@ Forces the AI to interrupt pattern-matching and rebuild solutions from the most 
 
 Supports both one-shot trigger ("think from first principles") and persistent mode ("enable first principles").
 
-**Example:** AI says "fix the OpenAI scraping". With first principles, it digs deeper and finds the real problem is a traffic routing bug from April — not the scraping itself. Symptom vs root cause.
+**Example:** You ask the AI to "add a cache for the slow API endpoint". The AI's analogical instinct is to wire up Redis. With first principles, it stops and questions: *What is actually slow?* It traces the real bottleneck to an N+1 query in the ORM — fixing the query eliminates the need for a cache entirely. One line changed instead of a new infrastructure dependency.
 
 [Full skill docs →](skills/first-principles/SKILL.md)
 
@@ -49,7 +48,7 @@ Supports both one-shot trigger ("think from first principles") and persistent mo
 
 Launches parallel AI agents, each attacking your code from a different angle. 6 dimensions: **Boundary conditions, Security, Performance bombs, Data consistency, Error handling, Concurrency**. Three tiers: quick (2-3 agents), standard (6 agents), deep (12-18 agents with cross-validation).
 
-**Example:** Found an OOM infinite loop in background workers, a "future timestamp" data contamination bug, and cache stampede false positives — all before they hit production.
+**Example:** You build a user registration form. An adversarial review finds: the email validation regex has a ReDoS vulnerability with crafted inputs (boundary), the username field allows invisible Unicode characters enabling impersonation (security), and the signup endpoint lacks rate limiting allowing mass bot account creation (performance). Three bugs caught before a single user signs up.
 
 [Full skill docs →](skills/adversarial-review/SKILL.md)
 
@@ -59,27 +58,17 @@ Launches parallel AI agents, each attacking your code from a different angle. 6 
 
 ### Via skills.sh (recommended)
 
-```bash
-npx skills add PlanBForFreedom/agent-thinking-skills
-```
-
-Both skills install together. Enable them in your AI agent:
+Install individual skills:
 
 ```bash
-# Claude Code / Codex
-/install PlanBForFreedom/agent-thinking-skills
+# First Principles
+npx skills add https://github.com/derekyrc/agent-thinking-skills --skill first-principles
 
-# OpenCode
-# Add to opencode.json: { "plugin": ["./skills/first-principles", "./skills/adversarial-review"] }
+# Adversarial Review
+npx skills add https://github.com/derekyrc/agent-thinking-skills --skill adversarial-review
 ```
 
-### Manual
-
-Clone the repo and point your agent's skills directory:
-
-```bash
-git clone https://github.com/PlanBForFreedom/agent-thinking-skills.git
-```
+Both skills install together when using the `--skill` flag for each.
 
 ---
 
@@ -106,4 +95,4 @@ Together they form a closed loop. Use them separately or chain them: design with
 
 ## License
 
-MIT © [DerekYRC](https://github.com/DerekYRC)
+Apache 2.0 © [DerekYRC](https://github.com/DerekYRC)

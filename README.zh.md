@@ -7,9 +7,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/DerekYRC/agent-thinking-skills"><img src="https://img.shields.io/github/stars/DerekYRC/agent-thinking-skills?style=flat-square&color=111111" alt="GitHub stars"></a>
 <a href="https://github.com/DerekYRC/agent-thinking-skills"><img src="https://img.shields.io/badge/协议-Apache%202.0-111111?style=flat-square" alt="Apache 2.0 协议"></a>
-</p>
 
 <p align="center">
   <a href="README.md"><img src="https://img.shields.io/badge/🌐-English-blue?style=for-the-badge" alt="English"></a>

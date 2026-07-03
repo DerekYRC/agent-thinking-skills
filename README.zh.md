@@ -1,19 +1,16 @@
-<p align="center">
-  <h1 align="center">🧠 Agent Thinking Skills</h1>
-</p>
-
-<p align="center">
-  <em>两个思维框架，让 AI Agent 的生成和验证能力提升十倍。</em>
-</p>
-
-<p align="center">
-<a href="https://github.com/DerekYRC/agent-thinking-skills"><img src="https://img.shields.io/badge/协议-Apache%202.0-111111?style=flat-square" alt="Apache 2.0 协议"></a>
-<a href="https://github.com/DerekYRC/agent-thinking-skills"><img src="https://img.shields.io/badge/支持-Claude%20Code%20%7C%20Codex%20%7C%20OpenCode-111111?style=flat-square" alt="支持 Claude Code、Codex、OpenCode"></a>
-</p>
-
-<p align="center">
-  <a href="README.md"><img src="https://img.shields.io/badge/🌐-English-blue?style=for-the-badge" alt="English"></a>
-</p>
+<br/><br/>
+<h1 align="center">🧠 智维技能 · Agent Thinking Skills</h1>
+<br/><br/>
+<h3 align="center"><em>两个思维框架，让 AI Agent 的生成和验证能力提升十倍。</em></h3>
+<br/><br/>
+<h3 align="center">
+  <a href="https://github.com/DerekYRC/agent-thinking-skills"><img src="https://img.shields.io/badge/协议-Apache%202.0-111111?style=flat-square" alt="Apache 2.0 协议"></a>
+  <a href="https://github.com/DerekYRC/agent-thinking-skills"><img src="https://img.shields.io/badge/支持-Claude%20Code%20%7C%20Codex%20%7C%20OpenCode-111111?style=flat-square" alt="支持 Claude Code、Codex、OpenCode"></a>
+</h3>
+<br/>
+<h1 align="center"><a href="README.md"><kbd>🌐 English</kbd></a></h1>
+<br/>
+<br/>
 
 ---
 

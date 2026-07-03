@@ -1,19 +1,16 @@
-<p align="center">
-  <h1 align="center">🧠 Agent Thinking Skills</h1>
-</p>
-
-<p align="center">
-  <em>Two thinking frameworks that make AI agents 10x better at generating and verifying code.</em>
-</p>
-
-<p align="center">
-<a href="https://github.com/DerekYRC/agent-thinking-skills"><img src="https://img.shields.io/badge/license-Apache%202.0-111111?style=flat-square" alt="Apache 2.0 license"></a>
-<a href="https://github.com/DerekYRC/agent-thinking-skills"><img src="https://img.shields.io/badge/works%20with-Claude%20Code%20%7C%20Codex%20%7C%20OpenCode-111111?style=flat-square" alt="Works with Claude Code, Codex, OpenCode"></a>
-</p>
-
-<p align="center">
-  <a href="README.zh.md"><img src="https://img.shields.io/badge/🌐-中文-blue?style=for-the-badge" alt="中文"></a>
-</p>
+<br/><br/>
+<h1 align="center">🧠 Agent Thinking Skills</h1>
+<br/><br/>
+<h3 align="center"><em>Two thinking frameworks that make AI agents 10x better at generating and verifying code.</em></h3>
+<br/><br/>
+<h3 align="center">
+  <a href="https://github.com/DerekYRC/agent-thinking-skills"><img src="https://img.shields.io/badge/license-Apache%202.0-111111?style=flat-square" alt="Apache 2.0 license"></a>
+  <a href="https://github.com/DerekYRC/agent-thinking-skills"><img src="https://img.shields.io/badge/works%20with-Claude%20Code%20%7C%20Codex%20%7C%20OpenCode-111111?style=flat-square" alt="Works with Claude Code, Codex, OpenCode"></a>
+</h3>
+<br/>
+<h1 align="center"><a href="README.zh.md"><kbd>🌐 中文</kbd></a></h1>
+<br/>
+<br/>
 
 ---
 

@@ -1,0 +1,10 @@
+{
+  "name": "first-principles",
+  "version": "1.0.0",
+  "description": "First Principles thinking mode. Forces AI to break out of analogical reasoning and re-derive solutions from fundamental truths. Five-step framework: identify assumptions, strip them, return to ground truths, derive from scratch, compare.",
+  "author": {
+    "name": "DerekYRC",
+    "url": "https://github.com/DerekYRC"
+  },
+  "hooks": "./hooks/claude-codex-hooks.json"
+}

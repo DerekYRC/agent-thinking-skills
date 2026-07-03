@@ -1,0 +1,28 @@
+{
+  "name": "first-principles",
+  "version": "1.0.0",
+  "description": "First Principles thinking mode. Five-step framework to re-derive solutions from fundamental truths.",
+  "author": {
+    "name": "DerekYRC",
+    "url": "https://github.com/DerekYRC"
+  },
+  "homepage": "https://github.com/DerekYRC/hello-ai",
+  "license": "MIT",
+  "keywords": ["first-principles", "thinking", "problem-solving", "root-cause"],
+  "skills": "./skills/",
+  "hooks": "./hooks/claude-codex-hooks.json",
+  "interface": {
+    "displayName": "First Principles",
+    "shortDescription": "Re-derive solutions from fundamental truths",
+    "longDescription": "Interrupt analogical reasoning and re-derive solutions from the most fundamental facts. Five-step framework: identify assumptions, strip them, ground truths, derive from scratch, compare.",
+    "developerName": "DerekYRC",
+    "category": "Thinking",
+    "capabilities": ["Instructions", "Lifecycle hooks"],
+    "defaultPrompt": [
+      "Think from first principles.",
+      "Find the root cause of this bug from first principles.",
+      "Design this architecture from first principles."
+    ],
+    "brandColor": "#1a1a2e"
+  }
+}

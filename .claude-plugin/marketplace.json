@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "first-principles",
+  "description": "First Principles thinking for AI agents. Break out of analogical reasoning, re-derive from fundamental truths.",
+  "owner": {
+    "name": "DerekYRC",
+    "url": "https://github.com/DerekYRC"
+  },
+  "plugins": [
+    {
+      "name": "first-principles",
+      "description": "Five-step framework: identify assumptions, strip them, ground truths, derive from scratch, compare.",
+      "source": "./",
+      "category": "thinking"
+    }
+  ]
+}

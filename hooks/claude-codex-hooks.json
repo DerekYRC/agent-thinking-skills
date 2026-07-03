@@ -1,0 +1,44 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "exec node \"${CLAUDE_PLUGIN_ROOT}/hooks/fp-activate.js\"",
+            "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { node \"$env:CLAUDE_PLUGIN_ROOT\\hooks\\fp-activate.js\" }",
+            "timeout": 5,
+            "statusMessage": "Loading first-principles mode..."
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "exec node \"${CLAUDE_PLUGIN_ROOT}/hooks/fp-subagent.js\"",
+            "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { node \"$env:CLAUDE_PLUGIN_ROOT\\hooks\\fp-subagent.js\" }",
+            "timeout": 5,
+            "statusMessage": "Loading first-principles mode..."
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "exec node \"${CLAUDE_PLUGIN_ROOT}/hooks/fp-mode-tracker.js\"",
+            "commandWindows": "if (Get-Command node -ErrorAction SilentlyContinue) { node \"$env:CLAUDE_PLUGIN_ROOT\\hooks\\fp-mode-tracker.js\" }",
+            "timeout": 5,
+            "statusMessage": "Tracking first-principles mode..."
+          }
+        ]
+      }
+    ]
+  }
+}

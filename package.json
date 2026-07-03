@@ -1,0 +1,22 @@
+{
+  "name": "@derek/first-principles",
+  "version": "1.0.0",
+  "description": "First Principles thinking mode for AI agents. Break out of analogical reasoning and re-derive solutions from fundamental truths.",
+  "keywords": ["opencode-plugin", "opencode", "first-principles", "claude-code", "codex"],
+  "license": "MIT",
+  "author": {
+    "name": "DerekYRC",
+    "url": "https://github.com/DerekYRC"
+  },
+  "main": "./.opencode/plugins/first-principles.mjs",
+  "exports": {
+    ".": "./.opencode/plugins/first-principles.mjs",
+    "./plugin": "./.opencode/plugins/first-principles.mjs"
+  },
+  "files": [
+    "hooks/",
+    "skills/",
+    ".opencode/",
+    "LICENSE"
+  ]
+}

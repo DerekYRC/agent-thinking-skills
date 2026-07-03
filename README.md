@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="README.zh.md"><img src="https://img.shields.io/badge/🌐-中文-blue?style=for-the-badge" alt="中文"></a>
+  <sub><a href="README.zh.md"><img src="https://img.shields.io/badge/🌐-中文-blue?style=for-the-badge" alt="中文"></a></sub>
 </p>
 
 ---

@@ -1,86 +1,84 @@
-# Adversarial Review Skill — Design Spec
+# Adversarial Review 技能 — 设计 Spec
 
-**Date**: 2026-07-03
-**Status**: Confirmed, pending implementation
-
----
-
-## Overview
-
-Create a skill named `adversarial-review` that systematically audits code from an attacker's perspective, finding vulnerabilities and risks. Pure one-shot trigger — no persistent mode. Runs a review, outputs a report, done.
-
-Supports **Claude Code + Codex + OpenCode**.
+**日期**: 2026-07-03
+**状态**: 已确认，待实现
 
 ---
 
-## Triggering
+## 概述
 
-**Pure one-shot**, no persistent mode. Each invocation runs a complete review and outputs a report.
+创建一个名为 `adversarial-review` 的 skill，站在攻击者角度审查代码，系统性找出潜在漏洞和风险。纯单次触发（无模式切换），审查完输出报告即结束。
 
-### Trigger Phrases and Levels
-
-| Trigger phrase | Level | Agents | Coverage |
-|---------------|-------|--------|----------|
-| "quick review" / "quick adversarial review" | Quick | 2-3 | Security+Boundary merged, Performance+Data merged |
-| "adversarial review" / "adversarial audit" (default) | Standard | 6 | One agent per dimension |
-| "deep adversarial review" / "thorough adversarial review" | Deep | 12-18 | 2-3 agents per dimension, different attack angles + cross-validation |
+支持 **Claude Code + Codex + OpenCode**。
 
 ---
 
-## 6 Review Dimensions
+## 触发方式
 
-| Dimension | Attack Angle | Agent Prompt Core |
-|-----------|-------------|-------------------|
-| **Boundary Conditions** | null, oversized input, special chars, time anomalies (future/past), negative values, type confusion, overflow | What extreme inputs can crash the system or cause incorrect behavior? |
-| **Security Vulnerabilities** | XSS, injection, auth bypass, sensitive data exposure, deserialization attacks, path traversal | If I were a malicious user, how would I steal, destroy, or bypass? |
-| **Performance Bombs** | OOM, infinite loops, infinite recursion, N+1 queries, large file blocking, resource leaks | What inputs or call patterns can exhaust system resources? |
-| **Data Consistency** | dirty data, lost updates, missing transaction boundaries, idempotency gaps, state machine errors | Under what timing or failure scenarios would data become corrupted or lost? |
-| **Error Handling** | swallowed exceptions, retry storms, missing degradation, broken error propagation, missing timeouts | What failure scenarios would make error handling itself the problem? |
-| **Concurrency & Race Conditions** | lock contention, duplicate submissions, cache penetration/stampede, health check false positives, distributed timing | When two things happen at the same time, what goes wrong? |
+**纯单次触发**，没有模式切换。每次调用跑一次完整审查，输出报告。
+
+### 触发词与级别
+
+| 触发词 | 级别 | Agent 数 | 覆盖 |
+|--------|------|---------|------|
+| "quick review" / "quick adversarial review" | 快速 | 2-3 | 安全+边界合并，性能+数据合并 |
+| "adversarial review" / "adversarial audit"（默认） | 标准 | 6 | 每维度一个 Agent |
+| "deep adversarial review" / "thorough adversarial review" | 深度 | 12-18 | 每维度 2-3 Agent，不同攻击角度 + 交叉验证 |
 
 ---
 
-## Three Tier Configurations
+## 6 个审查维度
 
-### Quick (2-3 Agents)
+| 维度 | 攻击角度 | Agent prompt 核心 |
+|------|---------|------------------|
+| **边界条件** | 空值、超大输入、特殊字符、时间异常（未来/过去）、负值、类型混淆、溢出 | 输入什么样的极端数据能让系统崩溃或行为异常？ |
+| **安全漏洞** | XSS、注入、权限绕过、敏感信息泄露、反序列化攻击、路径遍历 | 如果我是恶意用户，我如何窃取、破坏或绕过？ |
+| **性能炸弹** | OOM、死循环、无限递归、N+1 查询、大文件阻塞、资源泄漏 | 什么样的输入或调用模式能让系统资源耗尽？ |
+| **数据一致性** | 脏数据、丢失更新、事务边界缺失、幂等性缺失、状态机错误 | 在什么时序或失败场景下数据会出错或丢失？ |
+| **错误处理** | 吞异常、重试风暴、降级缺失、错误传播断裂、超时缺失 | 什么故障场景下错误处理本身会变成问题？ |
+| **并发竞态** | 锁竞争、重复提交、缓存穿透/击穿、探活假阳性、分布式时序 | 同时发生两个操作时，什么会出错？ |
+
+---
+
+## 三档配置
+
+### 快速（2-3 Agent）
 
 ```
-Agent 1: Security + Boundary Conditions  (merged)
-Agent 2: Performance + Data Consistency  (merged)
-Agent 3: Error Handling + Concurrency    (merged, optional; default is 2 agents)
+Agent 1: 安全 + 边界条件  合并
+Agent 2: 性能 + 数据一致性  合并
+Agent 3: 错误处理 + 并发竞态  合并（可选，默认 2 个 Agent）
 ```
 
-### Standard (6 Agents)
+### 标准（6 Agent）
 
-One independent agent per dimension, all running in parallel.
+每维度一个独立 Agent，并行执行。
 
-### Deep (12-18 Agents)
+### 深度（12-18 Agent）
 
-2-3 agents per dimension, attacking from different angles within the same dimension:
+每维度 2-3 Agent，从不同视角攻击同一维度：
 
 ```
-Boundary:  Agent 1 (data format perspective) + Agent 2 (time/state perspective) + Agent 3 (encoding/serialization perspective)
-Security:  Agent 1 (OWASP Top 10) + Agent 2 (business logic flaws) + Agent 3 (infrastructure/config)
-Performance: Agent 1 (memory/OOM) + Agent 2 (CPU/infinite loops) + Agent 3 (IO/file/network)
-Data Consistency: Agent 1 (transactions/atomicity) + Agent 2 (state machine/idempotency)
-Error Handling: Agent 1 (exception propagation) + Agent 2 (retry/degradation/timeouts)
-Concurrency: Agent 1 (lock/mutex) + Agent 2 (cache/duplicate submissions)
+边界条件:  Agent 1 (数据格式角度) + Agent 2 (时间/状态角度) + Agent 3 (编码/序列化角度)
+安全漏洞:  Agent 1 (OWASP Top 10) + Agent 2 (业务逻辑漏洞) + Agent 3 (基础设施/配置角度)
+性能炸弹:  Agent 1 (内存/OOM) + Agent 2 (CPU/死循环) + Agent 3 (IO/文件/网络)
+数据一致性: Agent 1 (事务/原子性) + Agent 2 (状态机/幂等性)
+错误处理:  Agent 1 (异常传播) + Agent 2 (重试/降级/超时)
+并发竞态:  Agent 1 (锁/互斥) + Agent 2 (缓存/重复提交)
 ```
 
-Deep-only feature: **cross-validation round**. Findings from agents within the same dimension are cross-reviewed by each other. Findings that don't receive cross-validation are marked as "not cross-validated".
+深度审查特有：**交叉验证轮**——同维度内各 Agent 的发现互相审阅，不一致的标记为"待确认"。
 
 ---
 
-## Report Format
-
-All reviews output a unified report:
+## 报告格式
 
 ```markdown
 # Adversarial Review Report
 
 **Level**: Quick | Standard | Deep
 **Review Time**: YYYY-MM-DD HH:MM
-**Scope**: [user-specified files/module/project, or current branch diff]
+**Scope**: [用户指定的范围，或当前 branch diff]
 
 ## Summary
 
@@ -89,24 +87,24 @@ All reviews output a unified report:
 
 ## Critical Issues
 
-### [Issue Title]
+### [问题标题]
 - **Dimension**: Boundary Conditions | Security | Performance | Data Consistency | Error Handling | Concurrency
 - **Location**: `file.ts:123`
-- **Reproduction**: [Concrete steps to trigger the issue]
-- **Impact**: [What happens when triggered]
-- **Suggested Fix**: [One-line suggestion, no detailed solution]
+- **Reproduction**: [复现步骤]
+- **Impact**: [触发后的影响]
+- **Suggested Fix**: [一句话建议，不做详细方案]
 
 ## Medium Issues
 
-[same format]
+[同上格式]
 
 ## Low Risk Issues
 
-[same format]
+[同上格式]
 
 ## Informational
 
-[same format]
+[同上格式]
 
 ## Coverage
 
@@ -116,117 +114,54 @@ All reviews output a unified report:
 | Security Vulnerabilities | ✅ Complete | 1 |
 | ... | | |
 
-## Cross-Validation Results (deep reviews only)
+## Cross-Validation Results（仅深度审查）
 
-[Confirmed/corrected findings after cross-validation]
+[交叉验证后的确认/修正]
 ```
 
 ---
 
-## Project Structure
+## 项目结构
 
 ```
 skills/
 └── adversarial-review/
-    └── SKILL.md                 # Skill body: review flow + dimension definitions + report template
+    └── SKILL.md                 # skill 主体（英文）
 .opencode/
 └── command/
     └── adversarial-review.md    # OpenCode slash command
 ```
 
-No hook layer needed because:
-- **Not a persistent mode** — no state to persist
-- **Pure one-shot trigger** — user says the phrase, review runs, done
-- Claude Code and Codex auto-trigger via SKILL.md description
-- OpenCode triggers via `.opencode/command/` slash command + skills directory registration
+不需要 hook 层：
+- **不是模式切换**，没有状态需要持久化
+- **纯单次触发**，用户说一句话就跑一次
+- Claude Code / Codex 通过 SKILL.md 的 description 自动触发
+- OpenCode 通过 command 文件 + skills 目录注册触发
 
-### Architecture Comparison with First-Principles
+### 与 first-principles 的架构对比
 
-| Dimension | first-principles | adversarial-review |
-|-----------|-----------------|-------------------|
-| Trigger | One-shot + persistent mode | Pure one-shot |
-| State file | Yes | No |
-| Hook layer | Needed (activate/mode-tracker/subagent) | Not needed |
-| OpenCode plugin | Needs .mjs (handles mode toggle) | Command file only |
-| Complexity | Mirrors ponytail | One SKILL.md + one command file |
-
----
-
-## SKILL.md Core Content
-
-```markdown
----
-name: adversarial-review
-description: >
-  Use when the user wants an adversarial security/stability audit of their code.
-  Stand in the attacker's shoes to systematically find boundary condition bugs,
-  security vulnerabilities, performance bombs, data consistency issues, error
-  handling gaps, and concurrency/race conditions. Supports three review tiers:
-  quick (2-3 agents), standard (6 agents), and deep (12-18 agents with
-  cross-validation). Trigger phrases include "adversarial review", "adversarial
-  audit", "quick review", "deep adversarial review".
----
-
-# Adversarial Review
-
-You are an attacker. Your task is to find and report vulnerabilities and risks in code.
-
-## Determine Review Level
-
-Parse user phrasing to select review level:
-- "quick review" → quick: 2-3 agents
-- "adversarial review" (default) → standard: 6 agents
-- "deep adversarial review" → deep: 12-18 agents
-
-## Review Flow
-
-### 1. Determine Scope
-Use user-specified scope if provided. Otherwise, review the current branch's recent changes.
-
-### 2. Launch Review Agents (parallel)
-
-[Launch agents per the selected tier. Each agent gets the attack prompt for its assigned dimension(s).]
-
-### 3. Collect Findings
-
-After all agents return, merge, deduplicate, and rank findings by severity (Critical/Medium/Low/Info).
-
-Critical issues must include: exact location, reproduction path, impact description, one-line suggested fix.
-
-### 4. Output Report
-
-Use the unified report template (see report section).
-
-## 6 Review Dimensions
-
-[Dimension definitions table]
-
-## Report Template
-
-[Report format]
-
-## Cross-Validation (deep reviews only)
-
-In deep reviews, findings from different agents within the same dimension are cross-reviewed.
-Matches are marked "Verified". Disagreements are marked "Needs Confirmation" with explanation.
-```
-
-See `skills/adversarial-review/SKILL.md` (written during implementation).
+| 维度 | first-principles | adversarial-review |
+|------|-----------------|-------------------|
+| 触发方式 | 单次 + 持续模式 | 纯单次 |
+| 状态文件 | 有 | 无 |
+| Hook 层 | 需要（activate/mode-tracker/subagent） | 不需要 |
+| OpenCode plugin | 需要 .mjs（处理模式切换） | 只需要 command 文件 |
+| 复杂度 | 对标 ponytail | 一个 SKILL.md + 一个 command 文件 |
 
 ---
 
-## Implementation Steps
+## 实现步骤
 
-1. Write `SKILL.md`
-2. Write `.opencode/command/adversarial-review.md`
-3. Verify: trigger → review → confirm report format
+1. 写 `SKILL.md`（英文）
+2. 写 `.opencode/command/adversarial-review.md`
+3. 验证：触发 → 审查 → 确认报告格式
 
 ---
 
-## Self-Review
+## 自审
 
-- No placeholders or TBDs
-- No contradictions: 3 tiers consistent with report format (deep adds cross-validation)
-- Scope focused: review only, no auto-fix
-- No ambiguity: clear trigger phrases, clear level-to-agent mapping
-- Minimal architecture: no hook layer needed, no mode persistence
+- 无 placeholder、TBD
+- 无矛盾：三档配置与报告格式一致（深度多了交叉验证）
+- 范围聚焦：只审查不修复
+- 无歧义：触发词明确，级别与 Agent 数对应明确
+- 架构最简：不需要 hook 层，不需要模式持久化

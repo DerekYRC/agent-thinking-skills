@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <sub><a href="README.zh.md">中文</a></sub>
+  <h3>🌐 <a href="README.zh.md">中文</a></h3>
 </p>
 
 ---

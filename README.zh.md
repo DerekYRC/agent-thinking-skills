@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <sub><a href="README.md">English</a></sub>
+  <h3>🌐 <a href="README.md">English</a></h3>
 </p>
 
 ---

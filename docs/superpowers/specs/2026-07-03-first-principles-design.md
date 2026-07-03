@@ -1,176 +1,177 @@
-# First Principles Skill — 设计 Spec
+# First Principles Skill — Design Spec
 
-**日期**: 2026-07-03
-**状态**: 已确认，待实现
-
----
-
-## 概述
-
-创建一个名为 `first-principles` 的 skill，强制 AI 中断类比推理，从第一性原理（基本事实）重新推导问题的解决方案。支持两种使用方式：
-1. **单次触发**：在 prompt 末尾加"从第一性原理出发"
-2. **模式切换**：手动开关，开启后持续保持第一性原理思维
-
-支持 **Claude Code + Codex + OpenCode** 三平台。
+**Date**: 2026-07-03
+**Status**: Confirmed, pending implementation
 
 ---
 
-## 触发机制
+## Overview
 
-### 触发词（自动触发）
+Create a skill named `first-principles` that forces the AI to break out of analogical reasoning and re-derive solutions from first principles (fundamental truths). Two usage modes:
+1. **One-shot trigger**: append "think from first principles" to your prompt
+2. **Persistent mode**: manually toggle on/off, stays active across turns
 
-以下关键词出现时自动注入 5 步框架：
-- "从第一性原理出发"
-- "回到本质重新想"
-- "找根本原因"
-- "从零推导"
-- "重新思考这个问题的本质"
-
-### 手动开关（模式切换）
-
-| 命令 | 行为 |
-|------|------|
-| `开启第一性原理` / `/first-principles on` | 进入持续模式 |
-| `关闭第一性原理` / `正常模式` / `/first-principles off` | 退出模式 |
-
-### 关闭后行为
-
-手动关闭后，自动触发词**不再生效**，直到用户重新开启。
+Supports **Claude Code + Codex + OpenCode**.
 
 ---
 
-## 5 步思维框架
+## Triggering
+
+### Keyword triggers (one-shot)
+
+When these phrases appear in user input, inject the 5-step framework:
+- "think from first principles"
+- "from first principles"
+- "find the root cause"
+- "rethink from fundamentals"
+- "derive from scratch"
+- "what is the real problem here"
+
+### Manual toggle (persistent mode)
+
+| Command | Behavior |
+|---------|----------|
+| `enable first principles` / `turn on first principles` / `/first-principles on` | Enter persistent mode |
+| `disable first principles` / `turn off first principles` / `/first-principles off` / `stop first principles` / `normal mode` | Exit persistent mode |
+
+### After disabling
+
+Once manually disabled, keyword triggers **no longer auto-activate** until the user re-enables.
+
+---
+
+## 5-Step Thinking Framework
 
 ```
-第1步：识别假设 → 第2步：剥离假设 → 第3步：基础事实 → 第4步：从零推导 → 第5步：对比结论
+Step 1: Identify Assumptions → Step 2: Strip Assumptions → Step 3: Ground Truths → Step 4: Derive from Scratch → Step 5: Compare & Conclude
 ```
 
-### 第1步：识别假设
-列出当前方案/问题背后的所有隐含假设。
-输出："当前隐含的假设：[...]"
+### Step 1: Identify Assumptions
+List all implicit assumptions behind the current approach/problem.
+Output: "Current implied assumptions: [...]"
 
-### 第2步：剥离假设
-逐个挑战：这个假设必须成立吗？有证据吗？
-输出："可剥离的假设：[...]，留下的硬约束：[...]"
+### Step 2: Strip Assumptions
+Challenge each: must this assumption hold? What evidence supports it?
+Output: "Assumptions that can be stripped: [...], remaining hard constraints: [...]"
 
-### 第3步：回到基础事实
-不参考任何已有方案，只列出最底层的事实和约束。
-输出："最基本的事实是：[...]"
+### Step 3: Return to Ground Truths
+Without referencing any existing solutions, list only the most fundamental facts and constraints.
+Output: "The fundamental truths are: [...]"
 
-### 第4步：从零推导
-从基础事实出发重新推导方案。
-输出："从基础事实推导：[...]"
+### Step 4: Derive from Scratch
+Starting from ground truths, re-derive a solution. Ignore existing code/architecture.
+Output: "Deriving from ground truths: [...]"
 
-### 第5步：对比结论
-推导结果 vs 当前方案，判断治标还是治本。
-输出："对比结论：[...]"
+### Step 5: Compare & Conclude
+Compare the derived result with the current approach. Distinguish symptom-fixes from root-cause fixes.
+Output: "Comparison & conclusion: [...]"
 
-### 深度自适应
+### Depth Adaptivity
 
-- **简单任务**（改配置、修 typo）：每步 1-2 句
-- **中等任务**（修 BUG、改功能）：每步 3-5 句
-- **复杂任务**（架构设计、重构）：每步充分展开
+- **Simple tasks** (config changes, typos): 1-2 sentences per step
+- **Medium tasks** (bug fixes, feature changes): 3-5 sentences per step
+- **Complex tasks** (architecture, refactoring): expand each step fully
 
-核心规则：**走完 5 步后再考虑代码，第 5 步之前不下结论。**
-
----
-
-## 场景判断（模式开启后）
-
-每轮用户请求做分类：
-
-**触发场景**（走 5 步框架）：
-- 描述了一个待解决的问题
-- 要求设计方案
-- 要求分析原因/修 BUG
-- 要求评价或审视某个方案
-- 提到了"为什么""原因""本质"
-
-**不触发场景**（正常回答，不走框架）：
-- 闲聊
-- 询问事实信息
-- 确认型问题（"是这样吗"）
-- 简单操作指令（"加一个注释"）
-- 代码实现请求（5 步已完成，用户说"写代码吧"）
+Core rule: **Complete all 5 steps before considering code. No solution before Step 5.**
 
 ---
 
-## 质疑问题本身的权力
+## Scene Classification (when persistent mode is on)
 
-skill 显式授权 AI 可以质疑用户提出问题的前提：
+Classify every user request:
 
-> 用户说"修A"，A 可能只是 B 的表象。在第 1 步识别假设时，必须把 **"问题是 A 而不是别的"** 本身当作一条假设来审查。
+**Trigger scenes** (run the 5-step framework):
+- A problem is described that needs solving
+- Requesting a design or architecture
+- Requesting root cause analysis / bug fix
+- Requesting evaluation or critique of an approach
+- Mentions "why", "root cause", "fundamentally", "essence"
+
+**Non-trigger scenes** (respond normally, no framework):
+- Casual conversation
+- Factual questions
+- Confirmation questions ("is this correct?")
+- Simple operations ("add a comment", "rename this variable")
+- Code implementation after 5 steps are done ("now write the code")
 
 ---
 
-## 项目结构
+## Right to Question the Problem
 
-对标 ponytail，最小化结构：
+The skill explicitly authorizes the AI to question the user's framing of the problem:
+
+> "Fix A" — A might just be a symptom of B. In Step 1, you MUST treat **"the problem is A and not something else"** as an assumption to be examined.
+
+---
+
+## Project Structure
+
+Mirrors ponytail, minimal footprint:
 
 ```
 .claude-plugin/
-├── plugin.json              # Claude Code 插件入口
-└── marketplace.json         # 市场注册
+├── plugin.json              # Claude Code plugin entry
+└── marketplace.json         # Marketplace registration
 .codex-plugin/
-└── plugin.json              # Codex 插件入口（interface 配置）
+└── plugin.json              # Codex plugin entry (interface config)
 .opencode/
 ├── plugins/
-│   └── first-principles.mjs # OpenCode ES module 插件
+│   └── first-principles.mjs # OpenCode ES module plugin
 └── command/
     └── first-principles.md  # OpenCode slash command
 skills/
 └── first-principles/
-    └── SKILL.md             # skill 主体
+    └── SKILL.md             # Skill body
 hooks/
-├── claude-codex-hooks.json  # Claude Code + Codex 共享 hook 配置
-├── fp-activate.js           # SessionStart：注入规则到上下文
-├── fp-mode-tracker.js       # UserPromptSubmit：检测开关命令
-├── fp-subagent.js           # SubagentStart：子 agent 也继承模式
-├── fp-config.js             # 配置：路径、模式定义
-├── fp-instructions.js       # 指令构建器：读 SKILL.md + 运行时包装
-└── fp-runtime.js            # 运行时：状态读写 + 多平台输出
-opencode.json                # OpenCode 插件注册
-package.json                 # npm 包（pi / OpenCode 扩展）
+├── claude-codex-hooks.json  # Shared hook config for CC + Codex
+├── fp-activate.js           # SessionStart: inject rules into context
+├── fp-mode-tracker.js       # UserPromptSubmit: detect toggle commands
+├── fp-subagent.js           # SubagentStart: sub-agents inherit mode
+├── fp-config.js             # Config: paths, mode definitions
+├── fp-instructions.js       # Instruction builder: read SKILL.md + wrap with header
+└── fp-runtime.js            # Runtime: state read/write + multi-platform output
+opencode.json                # OpenCode plugin registration
+package.json                 # npm package (pi / OpenCode extension)
 ```
 
-### 各文件职责
+### File Responsibilities
 
-| 文件 | 职责 |
-|------|------|
-| `SKILL.md` | 5 步框架 + 触发判断 + 质疑权力 + 深度自适应。所有平台的唯一行为定义源 |
-| `fp-config.js` | `VALID_MODES = ['on','off']`，`getClaudeDir()`，`isDeactivationCommand()` |
-| `fp-runtime.js` | `setMode()`/`clearMode()`/`readMode()`/`writeHookOutput()`，处理 CC/Codex/Copilot/OpenCode 多平台输出 |
-| `fp-instructions.js` | `getFpInstructions(mode)`：读 `SKILL.md` 去 frontmatter，拼接 `FIRST PRINCIPLES ACTIVE` header |
-| `fp-activate.js` | SessionStart hook：写状态文件 + emit 规则到上下文。mode==='off' 时跳过 |
-| `fp-mode-tracker.js` | UserPromptSubmit hook：检测 `/first-principles` 命令 + 自然语言开关 + deactivation 命令 |
-| `fp-subagent.js` | SubagentStart hook：读状态文件，mode 为 on 时注入规则到子 agent |
-| `first-principles.mjs` | OpenCode ES module plugin：`experimental.chat.system.transform` + `command.execute.before` |
-| `first-principles.md` | OpenCode slash command 文件：frontmatter description + 模板正文 |
-| `claude-codex-hooks.json` | hook 配置，SessionStart + SubagentStart + UserPromptSubmit |
-| `opencode.json` | OpenCode 插件注册：`{ "plugin": ["./.opencode/plugins/first-principles.mjs"] }` |
+| File | Responsibility |
+|------|---------------|
+| `SKILL.md` | 5-step framework + scene classification + right to question + depth adaptivity. Single source of truth for behavior across all platforms |
+| `fp-config.js` | `VALID_MODES = ['on','off']`, `getClaudeDir()`, `isDeactivationCommand()` |
+| `fp-runtime.js` | `setMode()`/`clearMode()`/`readMode()`/`writeHookOutput()`, handles CC/Codex/Copilot/OpenCode multi-platform output |
+| `fp-instructions.js` | `getFpInstructions(mode)`: read `SKILL.md` without frontmatter, prepend `FIRST PRINCIPLES ACTIVE` header |
+| `fp-activate.js` | SessionStart hook: write state file + emit rules to context. Skip if mode==='off' |
+| `fp-mode-tracker.js` | UserPromptSubmit hook: detect `/first-principles` command + natural language toggle + deactivation |
+| `fp-subagent.js` | SubagentStart hook: read state file, inject rules into sub-agents when mode is on |
+| `first-principles.mjs` | OpenCode ES module plugin: `experimental.chat.system.transform` + `command.execute.before` |
+| `first-principles.md` | OpenCode slash command file: frontmatter description + template body |
+| `claude-codex-hooks.json` | Hook config, SessionStart + SubagentStart + UserPromptSubmit |
+| `opencode.json` | OpenCode plugin registration: `{ "plugin": ["./.opencode/plugins/first-principles.mjs"] }` |
 
-### 文件复用层次
+### Reuse Hierarchy
 
 ```
-SKILL.md  ←── 唯一的行为定义源
+SKILL.md  ←── single source of truth for behavior
   ↑
-fp-instructions.js  ←── 读 SKILL.md 去 frontmatter，拼接 header
+fp-instructions.js  ←── reads SKILL.md, strips frontmatter, prepends header
   ↑
-fp-activate.js / fp-subagent.js / fp-mode-tracker.js  ←── 调用 instructions
+fp-activate.js / fp-subagent.js / fp-mode-tracker.js  ←── call instructions
   ↑
 fp-runtime.js  ←── setMode / clearMode / writeHookOutput
   ↑
-claude-codex-hooks.json  ←── 声明 hook 配置
+claude-codex-hooks.json  ←── declares hook config
 ```
 
-复用 ponytail 的：
-- `fp-runtime.js` 中的 `writeHookOutput` 逻辑（SessionStart raw stdout for CC, JSON for Codex）
-- `fp-config.js` 中的 `getClaudeDir()` 逻辑
-- 状态文件机制：`~/.claude/.first-principles-active`（Claude Code），`$PLUGIN_DATA/.first-principles-active`（Codex）
+Reusing ponytail patterns:
+- `writeHookOutput` logic in `fp-runtime.js` (SessionStart raw stdout for CC, JSON for Codex)
+- `getClaudeDir()` logic in `fp-config.js`
+- State file mechanism: `~/.claude/.first-principles-active` (Claude Code), `$PLUGIN_DATA/.first-principles-active` (Codex)
 
 ---
 
-## Hook 配置
+## Hook Config
 
 ```json
 {
@@ -206,83 +207,83 @@ claude-codex-hooks.json  ←── 声明 hook 配置
 
 ---
 
-## OpenCode 平台架构
+## OpenCode Platform Architecture
 
-OpenCode 跟 Claude Code/Codex 不同：没有 hooks.json，而是 ES module server plugin。
+OpenCode differs from Claude Code/Codex: no hooks.json, uses an ES module server plugin instead.
 
-### 三个 hook
+### Three Hooks
 
-| OpenCode hook | 对应功能 | 实现 |
-|---------------|---------|------|
-| `config` | 注册 slash command + skills 目录 | 读 `.opencode/command/` 下的 md 文件，解析 frontmatter |
-| `experimental.chat.system.transform` | 每轮注入规则到 system prompt | 读状态文件 → 非 off 时追加规则 |
-| `command.execute.before` | 拦截 `/first-principles on|off` 命令 | 写状态文件，下一个 turn 生效 |
+| OpenCode hook | Equivalent function | Implementation |
+|---------------|-------------------|----------------|
+| `config` | Register slash command + skills directory | Read `.opencode/command/` md files, parse frontmatter |
+| `experimental.chat.system.transform` | Inject rules into system prompt each turn | Read state file → append rules if not 'off' |
+| `command.execute.before` | Intercept `/first-principles on\|off` command | Write state file, takes effect next turn |
 
-### 状态文件
+### State File
 
-`~/.config/opencode/.first-principles-active`（独立于 Claude Code 的 `~/.claude/.first-principles-active`）
+`~/.config/opencode/.first-principles-active` (independent of Claude Code's `~/.claude/.first-principles-active`)
 
-### slash command 文件
+### Slash Command File
 
-`.opencode/command/first-principles.md` — OpenCode 格式（frontmatter description + 模板正文）。
-命令执行时 plugin 读状态文件决定开/关。
+`.opencode/command/first-principles.md` — OpenCode format (frontmatter description + template body).
+On command execution, plugin reads state file to determine on/off toggle.
 
-### 插件注册
+### Plugin Registration
 
-`opencode.json`：
+`opencode.json`:
 ```json
 { "plugin": ["./.opencode/plugins/first-principles.mjs"] }
 ```
 
-### 复用
+### Reuse
 
-- `first-principles.mjs` 通过 `createRequire` 桥接 CJS 的 `fp-instructions.js` + `fp-config.js`
-- 唯一的行为定义来源仍是 `skills/first-principles/SKILL.md`
-
----
-
-## 与 ponytail 的关键差异
-
-| 维度 | ponytail | first-principles |
-|------|----------|-----------------|
-| 模式数量 | 3 (lite/full/ultra) + review | 1 (on/off) |
-| 状态文件 | `.ponytail-active` | `.first-principles-active` |
-| 强度过滤 | `filterSkillBodyForMode` 按 level 过滤 | 不需要（无 level） |
-| Subagent | 必须继承（issue #252 修复） | 同样必须继承 |
-| deactivation | 仅全消息匹配 `stop ponytail` | 同样仅全消息匹配 `关闭第一性原理` |
+- `first-principles.mjs` bridges to CJS `fp-instructions.js` + `fp-config.js` via `createRequire`
+- Single source of truth for behavior remains `skills/first-principles/SKILL.md`
 
 ---
 
-## SKILL.md 正文（最终版）
+## Key Differences vs Ponytail
 
-参见 `skills/first-principles/SKILL.md`（实现时写入）。
-
----
-
-## 实现步骤
-
-1. 创建目录结构
-2. 写 `SKILL.md`
-3. 写 `fp-config.js`
-4. 写 `fp-runtime.js`
-5. 写 `fp-instructions.js`
-6. 写 `fp-activate.js`
-7. 写 `fp-mode-tracker.js`
-8. 写 `fp-subagent.js`
-9. 写 `claude-codex-hooks.json`
-10. 写 `.claude-plugin/plugin.json`
-11. 写 `.codex-plugin/plugin.json`
-12. 写 `.opencode/plugins/first-principles.mjs`（OpenCode ES module）
-13. 写 `.opencode/command/first-principles.md`（OpenCode slash command）
-14. 写 `opencode.json`
-15. 写 `package.json`
-16. 验证：启动 → 开启模式 → 确认注入 → 关闭模式 → 确认清除（三平台）
+| Dimension | ponytail | first-principles |
+|-----------|----------|------------------|
+| Mode count | 3 (lite/full/ultra) + review | 1 (on/off) |
+| State file | `.ponytail-active` | `.first-principles-active` |
+| Intensity filter | `filterSkillBodyForMode` per level | Not needed (no levels) |
+| Subagent | Must inherit (issue #252 fix) | Must inherit likewise |
+| Deactivation | Full message match `stop ponytail` | Full message match `stop first principles` |
 
 ---
 
-## 自审
+## SKILL.md Content (Final)
 
-- 无 placeholder、TBD
-- 无矛盾：5 步框架与场景判断一致，质疑权力与第 1 步一致
-- 范围聚焦：只做 first-principles，不涉及 adversarial-review
-- 无歧义：触发/不触发场景有明确分类标准
+See `skills/first-principles/SKILL.md` (written during implementation).
+
+---
+
+## Implementation Steps
+
+1. Create directory structure
+2. Write `SKILL.md`
+3. Write `fp-config.js`
+4. Write `fp-runtime.js`
+5. Write `fp-instructions.js`
+6. Write `fp-activate.js`
+7. Write `fp-mode-tracker.js`
+8. Write `fp-subagent.js`
+9. Write `claude-codex-hooks.json`
+10. Write `.claude-plugin/plugin.json`
+11. Write `.codex-plugin/plugin.json`
+12. Write `.opencode/plugins/first-principles.mjs` (OpenCode ES module)
+13. Write `.opencode/command/first-principles.md` (OpenCode slash command)
+14. Write `opencode.json`
+15. Write `package.json`
+16. Verify: startup → enable mode → confirm injection → disable mode → confirm cleared (all 3 platforms)
+
+---
+
+## Self-Review
+
+- No placeholders or TBDs
+- No contradictions: 5-step framework aligns with scene classification; right-to-question aligns with Step 1
+- Scope focused: only first-principles, no adversarial-review
+- No ambiguity: trigger/non-trigger scenes have clear classification criteria

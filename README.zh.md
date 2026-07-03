@@ -54,7 +54,69 @@
 
 ---
 
-## 安装
+## 使用方法
+
+### first-principles（第一性原理）
+
+当你希望 Agent 在写代码前先放慢节奏、质疑假设、从根本事实重新推导方案时使用。
+
+单次触发：
+
+```text
+从第一性原理出发再实现这个功能。
+从第一性原理分析这个 bug 的根因。
+Design this architecture from first principles.
+```
+
+持续模式：
+
+```text
+enable first principles
+disable first principles
+stop first principles
+normal mode
+```
+
+持续模式开启后，解决问题类请求会自动进入 5 步框架；简单编辑和闲聊会正常处理。
+
+OpenCode 命令：
+
+```text
+/first-principles on
+/first-principles off
+```
+
+### adversarial-review（对抗式审查）
+
+在实现完成后、合并或上线前使用。它会站在攻击者角度审查代码，并输出按风险排序的报告，不直接修改文件。
+
+触发方式：
+
+```text
+Run a quick adversarial review of src/auth.ts.
+Run an adversarial review of the current branch.
+Run a deep adversarial review of the payment flow.
+```
+
+审查档位：
+
+| 档位 | 触发语 | 覆盖范围 |
+|------|--------|----------|
+| 快速 | `quick adversarial review`、`quick review` | 2-3 个 Agent，合并多个审查维度 |
+| 标准 | `adversarial review`、`adversarial audit` | 6 个 Agent，每个维度一个 |
+| 深度 | `deep adversarial review`、`thorough adversarial review` | 12-18 个 Agent，并做交叉验证 |
+
+OpenCode 命令：
+
+```text
+/adversarial-review src/auth.ts
+/adversarial-review quick review current branch
+/adversarial-review deep payment flow
+```
+
+---
+
+## 安装与设置
 
 ### 通过 skills.sh（推荐）
 
@@ -68,7 +130,30 @@ npx skills add https://github.com/derekyrc/agent-thinking-skills --skill first-p
 npx skills add https://github.com/derekyrc/agent-thinking-skills --skill adversarial-review
 ```
 
-两个 skill 通过 `--skill` 参数分别安装。
+仓库里的 `skills.sh.json` 会把这两个 skill 归到 **Thinking Frameworks** 分组下。
+
+### Claude Code / Codex
+
+可以通过 `skills.sh` 安装，也可以把这个仓库作为插件导入。Claude/Codex 插件清单指向：
+
+```text
+skills/
+hooks/claude-codex-hooks.json
+```
+
+Hook 设置会在会话启动、Subagent 启动、用户提交 prompt 时加载并跟踪 `first-principles` 的持续模式。`adversarial-review` 是普通 skill 触发，不需要额外 hook 设置。
+
+### OpenCode
+
+使用仓库内置的 OpenCode plugin 注册 slash commands，并加载 skills 路径。在 `opencode.json` 中加入：
+
+```json
+{
+  "plugin": ["./.opencode/plugins/first-principles.mjs"]
+}
+```
+
+该 plugin 会注册 `/first-principles` 和 `/adversarial-review`，在 first-principles 模式开启时注入对应规则，并把开关状态保存在 OpenCode 配置目录中。
 
 ---
 
@@ -90,9 +175,3 @@ Vibe Coding 有两大薄弱环节：**思考深度**和**质量验证**。这两
 - **对抗式审查**管"验证"——确保代码在上线之前经得起真实世界的攻击
 
 两者构成闭环。可以单独使用，也可以串联：先用第一性原理设计，再用对抗式审查审计结果。
-
----
-
-## 协议
-
-Apache 2.0 © [DerekYRC](https://github.com/DerekYRC)

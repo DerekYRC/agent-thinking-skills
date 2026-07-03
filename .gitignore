@@ -4,6 +4,5 @@ PeekDock/.build/
 PeekDock/PeekDock.app/
 ponytail/
 docs/
-.agents/
 .claude/skills/
 .traces/

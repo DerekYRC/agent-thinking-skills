@@ -54,11 +54,73 @@ Launches parallel AI agents, each attacking your code from a different angle. 6 
 
 ---
 
-## Installation
+## Usage
+
+### first-principles
+
+Use it when you want the agent to slow down, question assumptions, and derive the solution from fundamentals before coding.
+
+One-shot prompts:
+
+```text
+Think from first principles before implementing this.
+Find the root cause of this bug from first principles.
+Design this architecture from first principles.
+```
+
+Persistent mode:
+
+```text
+enable first principles
+disable first principles
+stop first principles
+normal mode
+```
+
+When persistent mode is enabled, problem-solving requests go through the 5-step framework automatically. Simple edits and casual questions are handled normally.
+
+OpenCode command:
+
+```text
+/first-principles on
+/first-principles off
+```
+
+### adversarial-review
+
+Use it after implementation, before merging or deploying. It reviews code from an attacker's perspective and returns a ranked report instead of editing files.
+
+Prompt triggers:
+
+```text
+Run a quick adversarial review of src/auth.ts.
+Run an adversarial review of the current branch.
+Run a deep adversarial review of the payment flow.
+```
+
+Review levels:
+
+| Level | Trigger | Coverage |
+|-------|---------|----------|
+| Quick | `quick adversarial review`, `quick review` | 2-3 agents across merged dimensions |
+| Standard | `adversarial review`, `adversarial audit` | 6 agents, one per review dimension |
+| Deep | `deep adversarial review`, `thorough adversarial review` | 12-18 agents with cross-validation |
+
+OpenCode command:
+
+```text
+/adversarial-review src/auth.ts
+/adversarial-review quick review current branch
+/adversarial-review deep payment flow
+```
+
+---
+
+## Installation & Setup
 
 ### Via skills.sh (recommended)
 
-Install individual skills:
+Install each skill:
 
 ```bash
 # First Principles
@@ -68,7 +130,30 @@ npx skills add https://github.com/derekyrc/agent-thinking-skills --skill first-p
 npx skills add https://github.com/derekyrc/agent-thinking-skills --skill adversarial-review
 ```
 
-Both skills install together when using the `--skill` flag for each.
+The repository's `skills.sh.json` groups both skills under **Thinking Frameworks**.
+
+### Claude Code / Codex
+
+Install the skills with `skills.sh` or import this repository as a plugin. The Claude/Codex plugin manifests point at:
+
+```text
+skills/
+hooks/claude-codex-hooks.json
+```
+
+The hook setup enables persistent `first-principles` mode tracking on session start, subagent start, and user prompts. `adversarial-review` works as a normal skill trigger and needs no extra hook setup.
+
+### OpenCode
+
+Use the included OpenCode plugin to register slash commands and load the skills path. Add this to `opencode.json`:
+
+```json
+{
+  "plugin": ["./.opencode/plugins/first-principles.mjs"]
+}
+```
+
+The plugin registers `/first-principles` and `/adversarial-review`, injects first-principles instructions while the mode is on, and stores the mode state in the OpenCode config directory.
 
 ---
 

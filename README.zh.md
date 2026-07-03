@@ -7,9 +7,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/DerekYRC/agent-thinking-skills"><img src="https://img.shields.io/github/stars/DerekYRC/agent-thinking-skills?style=flat-square&color=111111&label=stars" alt="Stars"></a>
-  <img src="https://img.shields.io/badge/支持-Claude%20Code%20%7C%20Codex%20%7C%20OpenCode-111111?style=flat-square" alt="支持 Claude Code、Codex、OpenCode">
-  <img src="https://img.shields.io/badge/协议-Apache%202.0-111111?style=flat-square" alt="Apache 2.0 协议">
+  <a href="https://github.com/DerekYRC/agent-thinking-skills"><img src="https://img.shields.io/github/stars/DerekYRC/agent-thinking-skills?style=flat-square&color=111111" alt="GitHub stars"></a>
+<a href="https://github.com/DerekYRC/agent-thinking-skills"><img src="https://img.shields.io/badge/协议-Apache%202.0-111111?style=flat-square" alt="Apache 2.0 协议"></a>
 </p>
 
 <p align="center">

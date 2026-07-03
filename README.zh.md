@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/PlanBForFreedom/agent-thinking-skills"><img src="https://img.shields.io/github/stars/PlanBForFreedom/agent-thinking-skills?style=flat-square&color=111111&label=stars" alt="Stars"></a>
+  <a href="https://github.com/DerekYRC/agent-thinking-skills"><img src="https://img.shields.io/github/stars/PlanBForFreedom/agent-thinking-skills?style=flat-square&color=111111&label=stars" alt="Stars"></a>
   <img src="https://img.shields.io/badge/支持-Claude%20Code%20%7C%20Codex%20%7C%20OpenCode-111111?style=flat-square" alt="支持 Claude Code、Codex、OpenCode">
   <img src="https://img.shields.io/badge/协议-MIT-111111?style=flat-square" alt="MIT 协议">
 </p>
@@ -60,14 +60,14 @@
 ### 通过 skills.sh（推荐）
 
 ```bash
-npx skills add PlanBForFreedom/agent-thinking-skills
+npx skills add DerekYRC/agent-thinking-skills
 ```
 
 两个 skill 一起安装。在你的 AI Agent 中启用：
 
 ```bash
 # Claude Code / Codex
-/install PlanBForFreedom/agent-thinking-skills
+/install DerekYRC/agent-thinking-skills
 
 # OpenCode
 # 在 opencode.json 中添加：{ "plugin": ["./skills/first-principles", "./skills/adversarial-review"] }
@@ -78,7 +78,7 @@ npx skills add PlanBForFreedom/agent-thinking-skills
 克隆仓库并指向你的 Agent 的 skills 目录：
 
 ```bash
-git clone https://github.com/PlanBForFreedom/agent-thinking-skills.git
+git clone https://github.com/DerekYRC/agent-thinking-skills.git
 ```
 
 ---

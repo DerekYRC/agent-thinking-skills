@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/PlanBForFreedom/agent-thinking-skills"><img src="https://img.shields.io/github/stars/PlanBForFreedom/agent-thinking-skills?style=flat-square&color=111111&label=stars" alt="Stars"></a>
+  <a href="https://github.com/DerekYRC/agent-thinking-skills"><img src="https://img.shields.io/github/stars/PlanBForFreedom/agent-thinking-skills?style=flat-square&color=111111&label=stars" alt="Stars"></a>
   <img src="https://img.shields.io/badge/works%20with-Claude%20Code%20%7C%20Codex%20%7C%20OpenCode-111111?style=flat-square" alt="Works with Claude Code, Codex, OpenCode">
   <img src="https://img.shields.io/badge/license-MIT-111111?style=flat-square" alt="MIT license">
 </p>
@@ -60,14 +60,14 @@ Launches parallel AI agents, each attacking your code from a different angle. 6 
 ### Via skills.sh (recommended)
 
 ```bash
-npx skills add PlanBForFreedom/agent-thinking-skills
+npx skills add DerekYRC/agent-thinking-skills
 ```
 
 Both skills install together. Enable them in your AI agent:
 
 ```bash
 # Claude Code / Codex
-/install PlanBForFreedom/agent-thinking-skills
+/install DerekYRC/agent-thinking-skills
 
 # OpenCode
 # Add to opencode.json: { "plugin": ["./skills/first-principles", "./skills/adversarial-review"] }
@@ -78,7 +78,7 @@ Both skills install together. Enable them in your AI agent:
 Clone the repo and point your agent's skills directory:
 
 ```bash
-git clone https://github.com/PlanBForFreedom/agent-thinking-skills.git
+git clone https://github.com/DerekYRC/agent-thinking-skills.git
 ```
 
 ---

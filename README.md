@@ -54,6 +54,20 @@ Launches parallel AI agents, each attacking your code from a different angle. 6 
 
 ---
 
+## Installation
+
+Install each skill:
+
+```bash
+# First Principles
+npx skills add https://github.com/derekyrc/agent-thinking-skills --skill first-principles
+
+# Adversarial Review
+npx skills add https://github.com/derekyrc/agent-thinking-skills --skill adversarial-review
+```
+---
+
+
 ## Usage
 
 ### first-principles
@@ -116,56 +130,6 @@ OpenCode command:
 
 ---
 
-## Installation & Setup
-
-### Via skills.sh (recommended)
-
-Install each skill:
-
-```bash
-# First Principles
-npx skills add https://github.com/derekyrc/agent-thinking-skills --skill first-principles
-
-# Adversarial Review
-npx skills add https://github.com/derekyrc/agent-thinking-skills --skill adversarial-review
-```
-
-The repository's `skills.sh.json` groups both skills under **Thinking Frameworks**.
-
-### Claude Code / Codex
-
-Install the skills with `skills.sh` or import this repository as a plugin. The Claude/Codex plugin manifests point at:
-
-```text
-skills/
-hooks/claude-codex-hooks.json
-```
-
-The hook setup enables persistent `first-principles` mode tracking on session start, subagent start, and user prompts. `adversarial-review` works as a normal skill trigger and needs no extra hook setup.
-
-### OpenCode
-
-Use the included OpenCode plugin to register slash commands and load the skills path. Add this to `opencode.json`:
-
-```json
-{
-  "plugin": ["./.opencode/plugins/first-principles.mjs"]
-}
-```
-
-The plugin registers `/first-principles` and `/adversarial-review`, injects first-principles instructions while the mode is on, and stores the mode state in the OpenCode config directory.
-
----
-
-## Supported Platforms
-
-| Platform | first-principles | adversarial-review |
-|----------|:---:|:---:|
-| Claude Code | ✅ hooks | ✅ skill trigger |
-| Codex | ✅ hooks | ✅ skill trigger |
-| OpenCode | ✅ plugin | ✅ command |
-
----
 
 ## Why Two Skills?
 

@@ -54,6 +54,20 @@
 
 ---
 
+## 安装方法
+
+分别安装：
+
+```bash
+# 第一性原理
+npx skills add https://github.com/derekyrc/agent-thinking-skills --skill first-principles
+
+# 对抗式审查
+npx skills add https://github.com/derekyrc/agent-thinking-skills --skill adversarial-review
+```
+
+---
+
 ## 使用方法
 
 ### first-principles（第一性原理）
@@ -116,56 +130,6 @@ OpenCode 命令：
 
 ---
 
-## 使用方法与设置
-
-### 通过 skills.sh（推荐）
-
-分别安装：
-
-```bash
-# 第一性原理
-npx skills add https://github.com/derekyrc/agent-thinking-skills --skill first-principles
-
-# 对抗式审查
-npx skills add https://github.com/derekyrc/agent-thinking-skills --skill adversarial-review
-```
-
-仓库里的 `skills.sh.json` 会把这两个 skill 归到 **Thinking Frameworks** 分组下。
-
-### Claude Code / Codex
-
-可以通过 `skills.sh` 安装，也可以把这个仓库作为插件导入。Claude/Codex 插件清单指向：
-
-```text
-skills/
-hooks/claude-codex-hooks.json
-```
-
-Hook 设置会在会话启动、Subagent 启动、用户提交 prompt 时加载并跟踪 `first-principles` 的持续模式。`adversarial-review` 是普通 skill 触发，不需要额外 hook 设置。
-
-### OpenCode
-
-使用仓库内置的 OpenCode plugin 注册 slash commands，并加载 skills 路径。在 `opencode.json` 中加入：
-
-```json
-{
-  "plugin": ["./.opencode/plugins/first-principles.mjs"]
-}
-```
-
-该 plugin 会注册 `/first-principles` 和 `/adversarial-review`，在 first-principles 模式开启时注入对应规则，并把开关状态保存在 OpenCode 配置目录中。
-
----
-
-## 支持平台
-
-| 平台 | first-principles | adversarial-review |
-|------|:---:|:---:|
-| Claude Code | ✅ hooks | ✅ skill 触发 |
-| Codex | ✅ hooks | ✅ skill 触发 |
-| OpenCode | ✅ plugin | ✅ command |
-
----
 
 ## 为什么是两个？
 

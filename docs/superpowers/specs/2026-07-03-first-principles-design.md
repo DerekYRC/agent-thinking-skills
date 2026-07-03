@@ -11,7 +11,7 @@
 1. **单次触发**：在 prompt 末尾加"从第一性原理出发"
 2. **模式切换**：手动开关，开启后持续保持第一性原理思维
 
-支持 **Claude Code + Codex** 双平台。
+支持 **Claude Code + Codex + OpenCode** 三平台。
 
 ---
 
@@ -113,6 +113,11 @@ skill 显式授权 AI 可以质疑用户提出问题的前提：
 └── marketplace.json         # 市场注册
 .codex-plugin/
 └── plugin.json              # Codex 插件入口（interface 配置）
+.opencode/
+├── plugins/
+│   └── first-principles.mjs # OpenCode ES module 插件
+└── command/
+    └── first-principles.md  # OpenCode slash command
 skills/
 └── first-principles/
     └── SKILL.md             # skill 主体
@@ -124,6 +129,8 @@ hooks/
 ├── fp-config.js             # 配置：路径、模式定义
 ├── fp-instructions.js       # 指令构建器：读 SKILL.md + 运行时包装
 └── fp-runtime.js            # 运行时：状态读写 + 多平台输出
+opencode.json                # OpenCode 插件注册
+package.json                 # npm 包（pi / OpenCode 扩展）
 ```
 
 ### 各文件职责
@@ -132,12 +139,15 @@ hooks/
 |------|------|
 | `SKILL.md` | 5 步框架 + 触发判断 + 质疑权力 + 深度自适应。所有平台的唯一行为定义源 |
 | `fp-config.js` | `VALID_MODES = ['on','off']`，`getClaudeDir()`，`isDeactivationCommand()` |
-| `fp-runtime.js` | `setMode()`/`clearMode()`/`readMode()`/`writeHookOutput()`，处理 CC/Codex/Copilot 三平台输出 |
+| `fp-runtime.js` | `setMode()`/`clearMode()`/`readMode()`/`writeHookOutput()`，处理 CC/Codex/Copilot/OpenCode 多平台输出 |
 | `fp-instructions.js` | `getFpInstructions(mode)`：读 `SKILL.md` 去 frontmatter，拼接 `FIRST PRINCIPLES ACTIVE` header |
 | `fp-activate.js` | SessionStart hook：写状态文件 + emit 规则到上下文。mode==='off' 时跳过 |
 | `fp-mode-tracker.js` | UserPromptSubmit hook：检测 `/first-principles` 命令 + 自然语言开关 + deactivation 命令 |
 | `fp-subagent.js` | SubagentStart hook：读状态文件，mode 为 on 时注入规则到子 agent |
+| `first-principles.mjs` | OpenCode ES module plugin：`experimental.chat.system.transform` + `command.execute.before` |
+| `first-principles.md` | OpenCode slash command 文件：frontmatter description + 模板正文 |
 | `claude-codex-hooks.json` | hook 配置，SessionStart + SubagentStart + UserPromptSubmit |
+| `opencode.json` | OpenCode 插件注册：`{ "plugin": ["./.opencode/plugins/first-principles.mjs"] }` |
 
 ### 文件复用层次
 
@@ -196,6 +206,41 @@ claude-codex-hooks.json  ←── 声明 hook 配置
 
 ---
 
+## OpenCode 平台架构
+
+OpenCode 跟 Claude Code/Codex 不同：没有 hooks.json，而是 ES module server plugin。
+
+### 三个 hook
+
+| OpenCode hook | 对应功能 | 实现 |
+|---------------|---------|------|
+| `config` | 注册 slash command + skills 目录 | 读 `.opencode/command/` 下的 md 文件，解析 frontmatter |
+| `experimental.chat.system.transform` | 每轮注入规则到 system prompt | 读状态文件 → 非 off 时追加规则 |
+| `command.execute.before` | 拦截 `/first-principles on|off` 命令 | 写状态文件，下一个 turn 生效 |
+
+### 状态文件
+
+`~/.config/opencode/.first-principles-active`（独立于 Claude Code 的 `~/.claude/.first-principles-active`）
+
+### slash command 文件
+
+`.opencode/command/first-principles.md` — OpenCode 格式（frontmatter description + 模板正文）。
+命令执行时 plugin 读状态文件决定开/关。
+
+### 插件注册
+
+`opencode.json`：
+```json
+{ "plugin": ["./.opencode/plugins/first-principles.mjs"] }
+```
+
+### 复用
+
+- `first-principles.mjs` 通过 `createRequire` 桥接 CJS 的 `fp-instructions.js` + `fp-config.js`
+- 唯一的行为定义来源仍是 `skills/first-principles/SKILL.md`
+
+---
+
 ## 与 ponytail 的关键差异
 
 | 维度 | ponytail | first-principles |
@@ -227,7 +272,11 @@ claude-codex-hooks.json  ←── 声明 hook 配置
 9. 写 `claude-codex-hooks.json`
 10. 写 `.claude-plugin/plugin.json`
 11. 写 `.codex-plugin/plugin.json`
-12. 验证：启动 → 开启模式 → 确认注入 → 关闭模式 → 确认清除
+12. 写 `.opencode/plugins/first-principles.mjs`（OpenCode ES module）
+13. 写 `.opencode/command/first-principles.md`（OpenCode slash command）
+14. 写 `opencode.json`
+15. 写 `package.json`
+16. 验证：启动 → 开启模式 → 确认注入 → 关闭模式 → 确认清除（三平台）
 
 ---
 

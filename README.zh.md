@@ -1,5 +1,5 @@
 <p align="center">
-  <h1 align="center">🧠 智维技能 · Agent Thinking Skills</h1>
+  <h1 align="center">🧠 Agent Thinking Skills</h1>
 </p>
 
 <p align="center">
